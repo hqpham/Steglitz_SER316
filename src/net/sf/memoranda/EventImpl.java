@@ -57,6 +57,11 @@ public class EventImpl implements Event, Comparable {
     public String getText() {
         return _elem.getValue();
     }
+	
+	//US1
+	public String getEmail() {
+    	return _elem.getAttribute("email").getValue().toString();
+    }
 
     /**
      * @see net.sf.memoranda.Event#getContent()

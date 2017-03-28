@@ -38,10 +38,14 @@ import javax.swing.event.ChangeListener;
 
 import net.sf.memoranda.date.CalendarDate;
 import net.sf.memoranda.util.Local;
+import javax.swing.BoxLayout;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /*$Id: EventDialog.java,v 1.28 2005/02/19 10:06:25 rawsushi Exp $*/
 public class EventDialog extends JDialog implements WindowListener {	
     public boolean CANCELLED = false;
+	public boolean useEmail = true;
     boolean ignoreStartChanged = false;
     boolean ignoreEndChanged = false;
     JPanel topPanel = new JPanel(new BorderLayout());
@@ -80,6 +84,10 @@ public class EventDialog extends JDialog implements WindowListener {
     CalendarFrame endCalFrame = new CalendarFrame();
     CalendarFrame startCalFrame = new CalendarFrame();
     private Date eventDate;
+	private final JPanel middlePanel = new JPanel();
+    private final JPanel emailPanel = new JPanel();
+    private final JCheckBox emailToggle = new JCheckBox("Use Email");
+    public final JTextField emailInputField = new JTextField();
     
     public EventDialog(Frame frame, String title) {
         super(frame, title, true);
@@ -116,7 +124,7 @@ public class EventDialog extends JDialog implements WindowListener {
         timeSpin.setPreferredSize(new Dimension(60, 24));
         gbc = new GridBagConstraints();
         gbc.gridx = 1; gbc.gridy = 0;
-        gbc.insets = new Insets(10, 0, 5, 0);
+        gbc.insets = new Insets(10, 0, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         eventPanel.add(timeSpin, gbc);
         lblText.setText(Local.getString("Text"));
@@ -389,6 +397,37 @@ public class EventDialog extends JDialog implements WindowListener {
         this.getContentPane().add(topPanel, BorderLayout.NORTH);
         this.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
         
+		this.getContentPane().add(middlePanel, BorderLayout.WEST);
+        
+        emailInputField.setToolTipText("Field to enter your email.");
+        emailInputField.setForeground(Color.BLACK);
+        emailInputField.setColumns(25);
+        middlePanel.add(emailPanel);
+        emailPanel.setLayout(new BoxLayout(emailPanel, BoxLayout.X_AXIS));
+        emailToggle.setSelected(true);
+        emailToggle.setToolTipText("Use this to toggle email functionality on and off");
+        emailToggle.addItemListener(new ItemListener() {
+        	public void itemStateChanged(ItemEvent ie) {
+        		switch (ie.getStateChange()) {
+	        		case 1: //if selected.
+	        			emailInputField.setVisible(true);
+	        			emailInputField.setEnabled(true);
+	        			useEmail = true;
+	        			break;
+	        		case 2: //if deselected.
+	        			emailInputField.setVisible(false);
+	        			emailInputField.setEnabled(false);
+	        			useEmail = false;
+	        			break;
+	    			default:
+	    				//empty
+	    				break;
+        		}
+        	}
+        });
+ 		emailPanel.add(emailToggle);
+        
+        emailPanel.add(emailInputField);
         // Do final things...
         startCalFrame.cal.addSelectionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
