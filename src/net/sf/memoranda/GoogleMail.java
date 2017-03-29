@@ -1,3 +1,10 @@
+/*
+  File:				GoogleMail.java
+  Author:			doraemon
+  Date:				02/12/2016
+  
+  Description:		Send email using GMail SMTP server.
+*/
 package net.sf.memoranda;
 
 import com.sun.mail.smtp.SMTPTransport;
@@ -11,8 +18,15 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ *
+ * @author doraemon
+ */
+ /**
+  Class:			GoogleMail
 
-
+  Description:		Send email using GMail SMTP server.
+*/
 public class GoogleMail {
     private GoogleMail() {
     }
@@ -69,10 +83,10 @@ public class GoogleMail {
 
         Session session = Session.getInstance(props, null);
 
-        // 
+        // -- Create a new message --
         final MimeMessage msg = new MimeMessage(session);
 
-        // 
+        // -- Set the FROM and TO fields --
         msg.setFrom(new InternetAddress(username + "@gmail.com"));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 
